@@ -97,7 +97,7 @@ function App() {
 
   function setApp3() {
     setSystem({
-      url: "http://localhost:3003/remoteEntry.js",
+      url: "https://module-federation-2.netlify.app/remoteEntry.js",
       scope: "app3",
       module: "./Widget",
     });
