@@ -1,5 +1,5 @@
 import React from "react";
-
+import Modal from './Modal';
 function loadComponent(scope, module) {
   return async () => {
     // Initializes the share scope. This fills it with known provided modules from this build and all remotes
@@ -66,7 +66,7 @@ function System(props) {
   }
 
   if (!ready) {
-    return <h2>Loading dynamic script: {props.system.url}</h2>;
+    return <h2>Loading... dynamic script: {props.system.url}</h2>;
   }
 
   if (failed) {
@@ -83,43 +83,50 @@ function System(props) {
     </React.Suspense>
   );
 }
-
+const apps = [
+  {
+    url: "https://module-federation-1.netlify.app/remoteEntry.js",
+    scope: "app2",
+    module: "./Widget",
+    active: false,
+    name: 'Dispatch'
+  },
+  {
+    url: "https://module-federation-2.netlify.app/remoteEntry.js",
+    scope: "app3",
+    module: "./Widget",
+    active: false,
+    name: 'Order'
+  }
+]
 function App() {
   const [system, setSystem] = React.useState(undefined);
+  const [listedApps, setListedApps] = React.useState(apps)
+  const [showModal, toggleModal] =  React.useState(false)
 
-  function setApp2() {
-    setSystem({
-      url: "https://module-federation-1.netlify.app/remoteEntry.js",
-      scope: "app2",
-      module: "./Widget",
-    });
+  function setApp(index){
+    setSystem(apps[index])
   }
-
-  function setApp3() {
-    setSystem({
-      url: "https://module-federation-2.netlify.app/remoteEntry.js",
-      scope: "app3",
-      module: "./Widget",
-    });
-  }
-
   return (
     <div className="font-sans antialiased h-screen flex">
   {/* Sidebar / channel list */}
   <div className="bg-indigo-darkest text-purple-lighter flex-none w-24 p-6 hidden md:block">
-    <div onClick={setApp2} className="cursor-pointer mb-4">
-    <div className="bg-indigo-lighter opacity-25 h-12 w-12 flex items-center justify-center text-black text-2xl font-semibold rounded-lg mb-1 overflow-hidden">
-        D
+  {listedApps.filter(app => app.active).map((x,index) => (
+    <div onClick={() => setApp(index)} className="cursor-pointer mb-4">
+    <div className="bg-indigo-lighter opacity-25 h-12 w-12 flex items-center justify-center text-black text-sm font-semibold rounded-lg mb-1 overflow-hidden">
+        {x.name}
       </div>
       <div className="text-center text-white opacity-50 text-sm">⌘1</div>
     </div>
-    <div onClick={setApp3} className="cursor-pointer mb-4">
+  ))}
+   
+    {/* <div onClick={setApp3} className="cursor-pointer mb-4">
       <div className="bg-indigo-lighter opacity-25 h-12 w-12 flex items-center justify-center text-black text-2xl font-semibold rounded-lg mb-1 overflow-hidden">
         L
       </div>
       <div className="text-center text-white opacity-50 text-sm">⌘2</div>
-    </div>
-    <div className="cursor-pointer">
+    </div> */}
+    <div className="cursor-pointer" onClick={() => {toggleModal(true)}}>
       <div className="bg-white opacity-25 h-12 w-12 flex items-center justify-center text-black text-2xl font-semibold rounded-lg mb-1 overflow-hidden">
         <svg className="fill-current h-10 w-10 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 10c0 .553-.048 1-.601 1H11v4.399c0 .552-.447.601-1 .601-.553 0-1-.049-1-.601V11H4.601C4.049 11 4 10.553 4 10c0-.553.049-1 .601-1H9V4.601C9 4.048 9.447 4 10 4c.553 0 1 .048 1 .601V9h4.399c.553 0 .601.447.601 1z" /></svg>
       </div>
@@ -140,39 +147,6 @@ function App() {
         </svg>
       </div>
     </div>
-    {/* <div className="mb-8">
-      <div className="px-4 mb-2 text-white flex justify-between items-center">
-        <div className="opacity-75">Channels</div>
-        <div>
-          <svg className="fill-current h-4 w-4 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <path d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-          </svg>
-        </div>
-      </div>
-      <div className="bg-teal-dark py-1 px-4 text-white"># general</div>
-    </div> */}
-    {/* <div className="mb-8">
-      <div className="px-4 mb-2 text-white flex justify-between items-center">
-        <div className="opacity-75">Direct Messages</div>
-        <div>
-          <svg className="fill-current h-4 w-4 opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-            <path d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" />
-          </svg>
-        </div>
-      </div>
-      <div className="flex items-center mb-3 px-4">
-        <span className="bg-green rounded-full block w-2 h-2 mr-2" />
-        <span className="text-white opacity-75">Adam Wathan <span className="text-grey text-sm">(you)</span></span>
-      </div>
-      <div className="flex items-center mb-3 px-4">
-        <span className="bg-green rounded-full block w-2 h-2 mr-2" />
-        <span className="text-white opacity-75">David Hemphill</span>
-      </div>
-      <div className="flex items-center px-4 mb-6 opacity-50">
-        <span className="border border-white rounded-full w-2 h-2 mr-2" />
-        <span className="text-white">Steve Schoger</span>
-      </div>
-    </div> */}
     <div>
       <div className="px-4 mb-2 text-white flex justify-between items-center">
         <div className="opacity-75">Apps</div>
@@ -219,6 +193,7 @@ function App() {
       </div>
     </div> */}
   </div>
+  {showModal && <Modal close={() => toggleModal(false)} apps={listedApps} setListedApps={setListedApps}/>}
 </div>
 
   );
