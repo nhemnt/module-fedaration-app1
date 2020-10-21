@@ -102,44 +102,49 @@ const apps = [
 function App() {
   const [system, setSystem] = React.useState(undefined);
   const [listedApps, setListedApps] = React.useState(apps)
-  const [showModal, toggleModal] =  React.useState(false)
+  const [showModal, toggleModal] = React.useState(false)
 
-  function setApp(index){
+  function setApp(index) {
     setSystem(apps[index])
   }
   return (
     <div className="font-sans antialiased h-screen flex">
-  {/* Sidebar / channel list */}
-  <div className="bg-indigo-darkest text-purple-lighter flex-none w-24 p-6 hidden md:block">
-  {listedApps.filter(app => app.active).map((x,index) => (
-    <div onClick={() => setApp(index)} className="cursor-pointer mb-4">
-    <div className="bg-indigo-lighter opacity-25 h-12 w-12 flex items-center justify-center text-black text-sm font-semibold rounded-lg mb-1 overflow-hidden">
-        {x.name}
-      </div>
-      <div className="text-center text-white opacity-50 text-sm">⌘1</div>
-    </div>
-  ))}
-   
-    {/* <div onClick={setApp3} className="cursor-pointer mb-4">
+      {/* Sidebar / channel list */}
+      <div className="bg-indigo-darkest text-purple-lighter flex-none w-24 p-6 hidden md:block">
+        {listedApps.filter(app => app.active).map((x, index) => (
+          <div onClick={() => setApp(index)} className="cursor-pointer mb-4">
+            <div className="bg-indigo-lighter opacity-25 h-12 w-12 flex items-center justify-center text-black text-sm font-semibold rounded-lg mb-1 overflow-hidden">
+              {x.name}
+            </div>
+            <div className="text-center text-white opacity-50 text-sm">⌘1</div>
+          </div>
+        ))}
+
+        {/* <div onClick={setApp3} className="cursor-pointer mb-4">
       <div className="bg-indigo-lighter opacity-25 h-12 w-12 flex items-center justify-center text-black text-2xl font-semibold rounded-lg mb-1 overflow-hidden">
         L
       </div>
       <div className="text-center text-white opacity-50 text-sm">⌘2</div>
     </div> */}
-    <div className="cursor-pointer" onClick={() => {toggleModal(true)}}>
-      <div className="bg-white opacity-25 h-12 w-12 flex items-center justify-center text-black text-2xl font-semibold rounded-lg mb-1 overflow-hidden">
-        <svg className="fill-current h-10 w-10 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 10c0 .553-.048 1-.601 1H11v4.399c0 .552-.447.601-1 .601-.553 0-1-.049-1-.601V11H4.601C4.049 11 4 10.553 4 10c0-.553.049-1 .601-1H9V4.601C9 4.048 9.447 4 10 4c.553 0 1 .048 1 .601V9h4.399c.553 0 .601.447.601 1z" /></svg>
+        <div className="cursor-pointer" onClick={() => { toggleModal(!showModal) }}>
+          <div className="bg-white opacity-25 h-12 w-12 flex items-center justify-center text-black text-2xl font-semibold rounded-lg mb-1 overflow-hidden">
+            {
+              showModal
+                ?
+                <svg className="fill-current h-10 w-10 block" height="469pt" viewBox="0 -192 469.33333 469" width="469pt" xmlns="http://www.w3.org/2000/svg"><path d="m437.332031.167969h-405.332031c-17.664062 0-32 14.335937-32 32v21.332031c0 17.664062 14.335938 32 32 32h405.332031c17.664063 0 32-14.335938 32-32v-21.332031c0-17.664063-14.335937-32-32-32zm0 0" /></svg>
+                : <svg className="fill-current h-10 w-10 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 10c0 .553-.048 1-.601 1H11v4.399c0 .552-.447.601-1 .601-.553 0-1-.049-1-.601V11H4.601C4.049 11 4 10.553 4 10c0-.553.049-1 .601-1H9V4.601C9 4.048 9.447 4 10 4c.553 0 1 .048 1 .601V9h4.399c.553 0 .601.447.601 1z" /></svg>
+            }
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div className="bg-indigo-darker text-purple-lighter flex-none w-64 pb-6 hidden md:block">
+      {/* <div className="bg-indigo-darker text-purple-lighter flex-none w-64 pb-6 hidden md:block">
     <div className="text-white mb-2 mt-3 px-4 flex justify-between">
       <div className="flex-auto">
         <h1 className="font-semibold text-xl leading-tight mb-1 truncate">Module Federation</h1>
-        {/* <div className="flex items-center mb-6">
+        <div className="flex items-center mb-6">
           <span className="bg-green rounded-full block w-2 h-2 mr-2" />
           <span className="text-white opacity-50 text-sm">Dashoboard</span>
-        </div> */}
+        </div>
       </div>
       <div>
         <svg className="h-6 w-6 fill-current text-white opacity-25" viewBox="0 0 20 20">
@@ -157,34 +162,34 @@ function App() {
         </div>
       </div>
     </div>
-  </div>
-  {/* Chat content */}
-  <div className="flex-1 flex flex-col bg-white overflow-hidden">
-    {/* Top bar */}
-    <div className="border-b flex px-6 py-2 items-center flex-none">
-      <div className="flex flex-col">
-        <h3 className="text-grey-darkest mb-1 font-extrabold"></h3>
-        <div className="text-grey-dark text-sm truncate">
-            {/* Chit-chattin' about ugly HTML and mixing of concerns. */}
-        </div>
-      </div>
-      <div className="ml-auto hidden md:block">
-        <div className="relative">
-          <input type="search" placeholder="Search" className="appearance-none border border-grey rounded-lg pl-8 pr-4 py-2" />
-          <div className="absolute pin-y pin-l pl-3 flex items-center justify-center">
-            <svg className="fill-current text-grey h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
-            </svg>
+  </div> */}
+      {/* Chat content */}
+      <div className="flex-1 flex flex-col bg-white overflow-hidden">
+        {/* Top bar */}
+        <div className="border-b flex px-6 py-2 items-center flex-none">
+          <div className="flex flex-col">
+            <h3 className="text-grey-darkest mb-1 font-extrabold"></h3>
+            <div className="text-grey-dark text-sm truncate">
+              {/* Chit-chattin' about ugly HTML and mixing of concerns. */}
+            </div>
+          </div>
+          <div className="ml-auto hidden md:block">
+            <div className="relative">
+              <input type="search" placeholder="Search" className="appearance-none border border-grey rounded-lg pl-8 pr-4 py-2" />
+              <div className="absolute pin-y pin-l pl-3 flex items-center justify-center">
+                <svg className="fill-current text-grey h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M12.9 14.32a8 8 0 1 1 1.41-1.41l5.35 5.33-1.42 1.42-5.33-5.34zM8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12z" />
+                </svg>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    {/* Chat messages */}
-    <div className="px-6 py-4 flex-1 overflow-y-scroll">
-      {/* A message */}
-      <System system={system} />
-    </div>
-    {/* <div className="pb-6 px-4 flex-none">
+        {/* Chat messages */}
+        <div className="px-6 py-4 flex-1 overflow-y-scroll">
+          {/* A message */}
+          <System system={system} />
+        </div>
+        {/* <div className="pb-6 px-4 flex-none">
       <div className="flex rounded-lg border-2 border-grey overflow-hidden">
         <span className="text-3xl text-grey border-r-2 border-grey p-2">
           <svg className="fill-current h-6 w-6 block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M16 10c0 .553-.048 1-.601 1H11v4.399c0 .552-.447.601-1 .601-.553 0-1-.049-1-.601V11H4.601C4.049 11 4 10.553 4 10c0-.553.049-1 .601-1H9V4.601C9 4.048 9.447 4 10 4c.553 0 1 .048 1 .601V9h4.399c.553 0 .601.447.601 1z" /></svg>
@@ -192,9 +197,9 @@ function App() {
         <input type="text" className="w-full px-4" placeholder="Message #general" />
       </div>
     </div> */}
-  </div>
-  {showModal && <Modal close={() => toggleModal(false)} apps={listedApps} setListedApps={setListedApps}/>}
-</div>
+      </div>
+      {showModal && <Modal close={() => toggleModal(false)} apps={listedApps} setListedApps={setListedApps} />}
+    </div>
 
   );
 }
